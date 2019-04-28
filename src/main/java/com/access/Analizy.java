@@ -10,17 +10,17 @@ public class Analizy {
         try (BufferedReader reader = new BufferedReader(new FileReader(source));
              PrintWriter out = new PrintWriter(new FileOutputStream(target))) {
             String line;
-            String sleep = "no";
+            Boolean sleep = false;
             while ((line = reader.readLine()) != null) {
                 String[] lineArray = line.split(" ");
                 String type = lineArray[0];
                 String time = lineArray[1];
-                if ((type.equals("400") || type.equals("500")) && sleep.equals("no")) {
+                if ((type.equals("400") || type.equals("500")) && !sleep) {
                     out.print(time);
-                    sleep = "yes";
-                } else if (!type.equals("400") && !type.equals("500") && sleep.equals("yes")) {
+                    sleep = true;
+                } else if (!type.equals("400") && !type.equals("500") && sleep) {
                     out.println("; " + time);
-                    sleep = "no";
+                    sleep = false;
                 }
             }
         } catch (Exception e) {
