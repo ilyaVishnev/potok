@@ -1,6 +1,8 @@
 package com.zip;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -27,17 +29,18 @@ public class Zip {
                 for (File myFile : file.listFiles()) {
                     files.offer(myFile);
                 }
-            } else if (file.getName().contains(ext.substring(1))) {
+            } else if (file.getName().contains(ext.substring(1)) || file.isDirectory()) {
                 result.add(file);
             }
         }
         return result;
     }
 
-    public void addFiles(ZipOutputStream zipOutputStream, List<File> files) {
+    public void addFiles(ZipOutputStream zipOutputStream, List<File> files) throws IOException {
+        Path directoryPath = Paths.get(Directory);
         for (File file : files) {
             try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(file))) {
-                zipOutputStream.putNextEntry(new ZipEntry(file.getPath()));
+                zipOutputStream.putNextEntry(new ZipEntry(directoryPath.relativize(file.toPath()).toString()));
                 zipOutputStream.write(out.readAllBytes());
                 zipOutputStream.closeEntry();
             } catch (Exception e) {
