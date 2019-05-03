@@ -1,0 +1,8 @@
+мая 03, 2019 3:28:25 PM com.chat.Chatroom circle
+INFO: проверка 2
+мая 03, 2019 3:28:26 PM com.chat.Chatroom circle
+INFO: be
+мая 03, 2019 3:28:31 PM com.chat.Chatroom circle
+INFO: ещё раз
+мая 03, 2019 3:28:31 PM com.chat.Chatroom circle
+INFO: sometimes
