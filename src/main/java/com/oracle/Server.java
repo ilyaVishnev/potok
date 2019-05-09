@@ -9,9 +9,11 @@ import java.util.stream.Collectors;
 public class Server {
 
     private Socket socket;
+    private String[] answers;
 
     public Server(Socket socket) {
         this.socket = socket;
+        loadingFile();
         start();
     }
 
@@ -36,20 +38,23 @@ public class Server {
     }
 
     public String getAnswer(String question) {
+        for (int index = 1; index < answers.length - 1; index++) {
+            if (answers[index].equals(question)) {
+                String answer = answers[++index];
+                return answer.substring(2, answer.length() - 4).replace("\r\n", "\n");
+            }
+        }
+        return "exit".equals(question) ? question : "sorry, no answer";
+    }
+
+    public void loadingFile() {
         try (BufferedReader fromDoc = new BufferedReader(new FileReader("myAnswers.txt"))) {
             StringJoiner joiner = new StringJoiner(System.lineSeparator());
             fromDoc.lines().forEach(joiner::add);
-            String[] answers = joiner.toString().split("#");
-            for (int index = 1; index < answers.length - 1; index++) {
-                if (answers[index].equals(question)) {
-                    String answer = answers[++index];
-                    return answer.substring(2, answer.length() - 4).replace("\r\n", "\n");
-                }
-            }
+            answers = joiner.toString().split("#");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return "exit".equals(question) ? question : "sorry, no answer";
     }
 
     public static void main(String[] args) throws IOException {
